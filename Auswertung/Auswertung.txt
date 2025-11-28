@@ -67,23 +67,25 @@ Fest: 1113.31 HZ
 Locker: 1113.5 HZ
 
 SIlber_2 Stab:
-Wertemessungen
-1: 1924.72 HZ +- 0.18 syserror
-2: 1924.72 HZ +- 0.19 syserror
-3: 1924.72 HZ +- 0.16 syserror
-4: 1924.72 HZ +- 0.18 syserror
-5: 1924.72 HZ +- 0.15 syserror
+Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
+1: 1924.73 HZ  0.19      0.16         0.058             0.003
+2: 1924.74 HZ  0.19      0.16         0.06              0.003
+3: 1924.74 HZ, 0.18      0.16         0.054             0.0011
+4: 1924.73 HZ, 0.19      0.16         0.057             0.003
+5: 1924.72 HZ  0.16      0.16         0.063             -0.0017
+
+f = 1924.73, sigma_stat = 0.0037, sigma_sys = 0.18
 
 Fehlermessungen
-1cm: 1924.09 HZ
-     1924.09 HZ  
-2cm: 1923.26 HZ
-     1923.26 HZ
-4cm: 1922.21 HZ
-     1922.21 HZ
-rot_halb_pi: 1923.89 HZ
-             1923.89 HZ
-rot_pi: 1924.09 HZ
-        1924.09 HZ
-Fest: 1925.14 HZ
+1cm: 1924.11 HZ
+     1924.11 HZ  
+2cm: 1923.27 HZ
+     1923.27 HZ
+4cm: 1922.22 HZ
+     1922.22 HZ
+rot_halb_pi: 1923.9 HZ
+             1923.9 HZ
+rot_pi: 1924.11 HZ
+        1924.11 HZ
+Fest: 1925.15 HZ
 Locker: none*
