@@ -6,6 +6,8 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1460.17 HZ  0.17      0.16         0.062             -0.00067
 5: 1460.17 HZ  0.16      0.18         0.063              0.0013
 
+f = 1460.21, sig_stat = 0.036, sig_sys = 0.17
+
 Fehlermessungen
 1cm: 1459.75 HZ  
      1459.75 HZ 
@@ -22,22 +24,24 @@ Locker: 1459.95 Hz
 
 Silber Stab:
 Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
-1: 1729.51 HZ  0.13      0.14         0.052             -0.0028
-2: 1729.51 HZ  0.14      0.14         0.053             -0.002
-3: 1729.51 HZ  0.14      0.14         0.052             -0.002
-4: 1729.31 Hz  0.15      0.14         0.062             -0.00067
-5: 1729.51 HZ  0.14      0.14         0.054             -0.0023
+1: 1729.51 HZ  0.16      0.16         0.052             -0.00075
+2: 1729.51 HZ  0.17      0.16         0.053             -0.0003
+3: 1729.51 HZ  0.17      0.16         0.052             -0.00021
+4: 1729.33 Hz  0.17      0.16         0.062             -0.00062
+5: 1729.51 HZ  0.17      0.16         0.054             -0.00028
+
+f = 1729.47, sig_stat = 0.036, sig_sys = 0.17
 
 Fehlermessungen
-1cm: 1729.1 Hz
-     1728.89 Hz
-2cm: 1729.1 Hz
+1cm: 1729.13 Hz
+     1728.92 Hz
+2cm: 1729.11 Hz
      1728.26 HZ
 4cm: 1727.64 HZ
      1727.85 HZ
-rot_halb_pi: 1729.31 HZ
-rot_pi: 1729.1 HZ
-Fest: 1729.31 HZ
+rot_halb_pi: 1729.32 HZ
+rot_pi: 1729.12 HZ
+Fest: 1729.32 HZ
 Locker: 1729.31 HZ
 
 Gold Stab:
