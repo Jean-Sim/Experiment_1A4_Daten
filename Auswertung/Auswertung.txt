@@ -1,1 +1,75 @@
+Brauner Stab:
+Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
+1: 1460.35 HZ  0.13      0.14         0.056             -0.0028
+2: 1460.15 HZ  0.15      0.14         0.061             -0.00078
+3: 1460.15 HZ  0.15      0.14         0.062             -0.0014
+4: 1460.15 HZ  0.14      0.14         0.062             -0.0016
+5: 1460.15 HZ  0.16      0.14         0.063              0.0014
 
+Fehlermessungen
+1cm: 1459.73 HZ  
+     1459.73 HZ 
+2cm: 1459.1 HZ 
+     1459.73 HZ 
+4cm: 1459.94 HZ 
+     1459.94 HZ 
+rot_halb_pi: 1459.94 HZ
+             1460.14 HZ
+rot_pi: 1460.56 HZ
+        1460.57 HZ 
+Fest: 1459.94 HZ 
+Locker: 1459.94 Hz
+
+Silber Stab:
+Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
+1: 1729.51 HZ  0.13      0.14         0.052             -0.0028
+2: 1729.51 HZ  0.14      0.14         0.053             -0.002
+3: 1729.51 HZ  0.14      0.14         0.052             -0.002
+4: 1729.31 Hz  0.15      0.14         0.062             -0.00067
+5: 1729.51 HZ  0.14      0.14         0.054             -0.0023
+
+Fehlermessungen
+1cm: 1729.1 Hz
+     1728.89 Hz
+2cm: 1729.1 Hz
+     1728.26
+4cm: 1727.64
+     1727.85
+rot_halb_pi: 1729.31
+rot_pi: 1729.1
+Fest: 1729.31
+Locker: 1729.31
+
+Gold Stab:
+Wertemessungen
+1: 1113.49 HZ +- 0.12 syserror
+2: 1113.5 Hz  +- 0.15 syserror
+3: 1113.5 Hz  +- 0.15 syserror
+4: 1113.5 Hz  +- 0.15 syserror
+5: 1113.5 HZ  +- 0.15 syserror
+
+Fehlermessungen
+1cm:
+2cm:
+4cm:
+rot_halb_pi:
+rot_pi:
+Fest:
+Locker:
+
+SIlber_2 Stab:
+Wertemessungen
+1: 1924.72 HZ +- 0.18 syserror
+2: 1924.72 HZ +- 0.19 syserror
+3: 1924.72 HZ +- 0.16 syserror
+4: 1924.72 HZ +- 0.18 syserror
+5: 1924.72 HZ +- 0.15 syserror
+
+Fehlermessungen
+1cm:
+2cm:
+4cm:
+rot_halb_pi:
+rot_pi:
+Fest:
+Locker:
