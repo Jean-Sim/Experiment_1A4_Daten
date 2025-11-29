@@ -1,3 +1,6 @@
+sigma_sys_1 = summe sigma_sys/ N sigma,  sigma_stat = ddof1 , f =mean
+sigma_sys_2 = np.mean(np.abs(f-f_fehler))
+sigma_sys = sqrt(sigma_sys_1**2 + sigma_sys_2**2)
 Brauner Stab:
 Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 1: 1460.35 HZ  0.17      0.16         0.056             -0.00041
@@ -6,7 +9,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1460.17 HZ  0.17      0.16         0.062             -0.00067
 5: 1460.17 HZ  0.16      0.18         0.063              0.0013
 
-f = 1460.21, sig_stat = 0.036, sig_sys = 0.17
+f = 1460.21, sig_stat = 0.036, sig_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1459.75 HZ  
@@ -22,6 +25,8 @@ rot_pi: 1460.57 HZ
 Fest: 1459.95 HZ 
 Locker: 1459.95 Hz
 
+sigma_sys_2 = 0.38
+
 Silber Stab:
 Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 1: 1729.51 HZ  0.16      0.16         0.052             -0.00075
@@ -30,7 +35,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1729.33 Hz  0.17      0.16         0.062             -0.00062
 5: 1729.51 HZ  0.17      0.16         0.054             -0.00028
 
-f = 1729.47, sig_stat = 0.036, sig_sys = 0.17
+f = 1729.47, sig_stat = 0.036, sig_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1729.13 Hz
@@ -44,6 +49,8 @@ rot_pi: 1729.12 HZ
 Fest: 1729.32 HZ
 Locker: 1729.31 HZ
 
+sigma_sys_2 = 0.67
+
 Gold Stab:
 Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 1: 1113.5 HZ   0.15      0.16         0.06              -0.0029
@@ -52,7 +59,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1113.52 Hz  0.17      0.16         0.062             -0.00064
 5: 1113.52 HZ  0.17      0.16         0.062             -0.00066
 
-f = 1113.52, sigma_stat = 0.004, sigma_sys = 0.17
+f = 1113.52, sigma_stat = 0.004, sigma_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1113.1 HZ
@@ -65,6 +72,8 @@ rot_halb_pi: 1113.51 HZ
 rot_pi: 1113.3 HZ
 Fest: 1113.31 HZ
 Locker: 1113.5 HZ
+
+sigma_sys_2 = 0.48
 
 SIlber_2 Stab:
 Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
@@ -89,3 +98,5 @@ rot_pi: 1924.11 HZ
         1924.11 HZ
 Fest: 1925.15 HZ
 Locker: none*
+
+sigma_sys_2 = 1.1
