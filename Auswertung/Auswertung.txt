@@ -9,7 +9,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1460.17 HZ  0.17      0.16         0.062             -0.00067
 5: 1460.17 HZ  0.16      0.18         0.063              0.0013
 
-f = 1460.21, sig_stat = 0.036, sig_sys_1 = 0.17
+f = 1460.21, std=0.08, sig_stat = 0.036, sig_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1459.75 HZ  
@@ -35,7 +35,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1729.33 Hz  0.17      0.16         0.062             -0.00062
 5: 1729.51 HZ  0.17      0.16         0.054             -0.00028
 
-f = 1729.47, sig_stat = 0.036, sig_sys_1 = 0.17
+f = 1729.47, std = 0.08, sig_stat = 0.036, sig_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1729.13 Hz
@@ -59,7 +59,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1113.52 Hz  0.17      0.16         0.062             -0.00064
 5: 1113.52 HZ  0.17      0.16         0.062             -0.00066
 
-f = 1113.52, sigma_stat = 0.004, sigma_sys_1 = 0.17
+f = 1113.52, std = 0.0089 ,sigma_stat = 0.004, sigma_sys_1 = 0.17
 
 Fehlermessungen
 1cm: 1113.1 HZ
@@ -83,7 +83,7 @@ Wertemessungen sigma_sys sigma_sys_ps sigma_sys_pad/win cov
 4: 1924.73 HZ, 0.19      0.16         0.057             0.003
 5: 1924.72 HZ  0.16      0.16         0.063             -0.0017
 
-f = 1924.73, sigma_stat = 0.0037, sigma_sys = 0.18
+f = 1924.73, std = 0.0083, sigma_stat = 0.0037, sigma_sys = 0.18
 
 Fehlermessungen
 1cm: 1924.11 HZ
