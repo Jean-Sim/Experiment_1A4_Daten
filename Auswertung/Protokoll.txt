@@ -1,0 +1,14 @@
+-Einführung was für daten wir aufgezeichnet haben und was wir mit diesen machen werden 
+- Erkläreung zur verwendeten fourier transfromation und Peakschwerpunkt methode
+  - Erklärung zur Zerodpadding und Han window
+  - Erklärung zur peakschwerpunkt fehlerabschätzungs methode
+  - Erklärung zur Padding und Peakschwerpunkt methode Fehler und corelations abschätzungs methode
+- Erklärung zur berechnung von mean, std, sysfehler_1, und statfehler auf messwerte
+- Auflistung der ergebnisse 
+- Eklärung Fehlermessung und wie sysfehler_2 berechnet wurde
+  - Auflistung der sysfehler
+- Zsammenfügen sysfehler 1 und 2 
+- Ich diskutiere die anderen messfehler 
+- Fehler diskussion 
+- Endergebnisse berechnen 
+- Ergebnisse Vergliechen mit literatur werten 
