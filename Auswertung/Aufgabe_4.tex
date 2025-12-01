@@ -1,0 +1,517 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{geometry}
+\geometry{margin=25mm}
+
+\begin{document}
+
+\section{Einleitung}
+Ziel des Versuchs ist die Bestimmung der Eigenfrequenzen von vier Stäben sowie daraus abgeleitet die Bestimmung des Elastizitätsmoduls $E$ und der Dichte $\rho$. Zu diesem Zweck wurden für jeden Stab fünf Messungen der Schwingungsfrequenz durchgeführt; zusätzlich wurden für jede Messreihe ca. 10--12 Messungen in veränderten Einspannungs- bzw. Anschlagbedingungen (z. B. Verschiebungen um \SI{1}{cm}, \SI{2}{cm}, \SI{4}{cm}; Verdrehungen um \ang{90}, \ang{180}; sehr hohe bzw. sehr niedrige Einspannung) aufgenommen, um systematische Fehler durch nicht-ideale Einspannung abzuschätzen.
+
+\section{Aufzeichnung und Fourier-Analyse}
+Die Einzelmessungen bestehen jeweils aus einer zeitabhängigen Spannungs- bzw. Schallsignal-Kurve, die mit einem am Stabende platzierten Mikrofon aufgenommen wurde. Das gemessene Signal $u[n]$ wurde mit der Fourier-Transformation ausgewertet. Vor der Analyse wurden Zero-Padding und ein Hann-Window angewendet, um die Frequenzlokalisierung zu verbessern.
+
+\subsection{Hann-Window}
+Das angewendete Hann-Fenster ist gegeben durch
+\[
+w[n] = \tfrac{1}{2}\Bigl(1 - \cos\!\bigl(\tfrac{2\pi n}{N-1}\bigr)\Bigr), \qquad n=0,\dots,N-1,
+\]
+und das geglättete Signal lautet
+\[
+u_{\mathrm{neu}}[n] = u[n]\cdot w[n].
+\]
+Anmerkung: Durch Han(n)-Windowing werden Seitenmaxima unterdrückt, allerdings entstehen breitere Peaks im Frequenzspektrum. Sowohl Zero-Padding als auch Windowing tragen später zum systematischen Fehler bei und müssen abgeschätzt werden.
+
+\subsection{Zero-Padding}
+Zur Verbesserung der Frequenzauflösung wurde das Signal mit Nullen auf das Achtfache seiner Länge erweitert (Zero-Padding-Faktor $8$). Zero-Padding erhöht die Dichte der Frequenzpunkte im Spektrum, vergrößert jedoch nicht die tatsächliche Linienbreite.
+
+\section{Peaklokalisierung — Schwerpunktmethode}
+Zur genauen Bestimmung der Peakfrequenz wird zunächst der größte Peak im Spektrum visuell kontrolliert und als Ausgangspunkt verwendet. Anschließend wird die \emph{Peak-Schwerpunkt}-Methode (zentroidaler Schwerpunkt) über einen Indexbereich $I$ angewendet. Für die Peakfrequenz gilt:
+\begin{equation}
+f_{\mathrm{peak}} \;=\; \frac{\sum_{i\in I} f_i\,X_i}{\sum_{i\in I} X_i},
+\end{equation}
+wobei $f_i$ die Frequenzen der betrachteten Spektralpunkte und $X_i$ die zugehörigen Amplituden sind.
+
+\section{Abschätzung des systematischen Fehlers der Peak-Schwerpunkt-Methode}
+Die Wahl der Fenstergröße und -form für die Schwerpunktmethode beeinflusst das Ergebnis; zur Abschätzung des systematischen Fehlers variieren wir die in die Methode einbezogenen Indizes. Konkret wird aus der Liste
+\[
+(1,1,1,1,2,2,2,3,3,4)
+\]
+eine Menge von 25 Permutationen erzeugt (hier bezeichnet als $l_{p}$). Aus jeder Permutation wird ein Fenster durch sukzessives Aufaddieren gebildet:
+\begin{align}
+x_{\mathrm{oben}}[0] &= 0, & x_{\mathrm{unten}}[0] &= 0,\\
+x_{\mathrm{oben}}[n+1] &= x_{\mathrm{oben}}[n] + l_{p}[2n], & 
+x_{\mathrm{unten}}[n+1] &= x_{\mathrm{unten}}[n] + l_{p}[2n+1].
+\end{align}
+Auf diese Weise entstehen $25\times 5$ zufällig generierte Fenster unterschiedlicher Größe und Symmetrie. Für jedes Fenster berechnen wir den einzelnen Peak-Schwerpunkt $y_n$ mittels
+\begin{equation}
+y_n = \mathrm{peak\_schwer}(f,A,x_0,x_{\mathrm{unten}}(n+1),x_{\mathrm{oben}}(n+1)),
+\end{equation}
+ (siehe \texttt{peak_schwer_error.peak\_finder.py}). Dann definieren wir
+\begin{align}
+\overline{y} &= \frac{1}{N}\sum_{n\in N} y_n,\\
+\sigma_{\mathrm{sys,ps}} &=\; \sqrt{\frac{1}{N}\sum_{n\in N}\bigl(y_n-\overline{y}\bigr)^2},
+\end{align}
+wobei $\sigma_{\mathrm{sys,ps}}$ der systematische Fehler der Peak-Schwerpunkt-Methode ist.
+
+\section{Abschätzung des systematischen Fehlers durch Padding und Windowing}
+Analog werden für Padding- und Window-Parameter (Padding-Werte $(2,4,8,16)$ und Window-Größen $(0.5,0.75,1.0)$) alle möglichen Permutationen durchlaufen; für jede Kombination wird die Fourier-Transformation durchgeführt und der Peak mittels der Schwerpunktmethode bestimmt. Für die resultierenden Werte $y'_n$ definieren wir
+\begin{align}
+\overline{y'} &= \frac{1}{N}\sum_{n\in N} y'_n,\\
+\sigma_{\mathrm{sys,pw}} &= \; \sqrt{\frac{1}{N}\sum_{n\in N}\bigl(y'_n - \overline{y'}\bigr)^2},
+\end{align}
+Folgend bestimmen wir die Kovarianz, indem wir zwei Arten von Abweichungen der Peakposition miteinander vergleichen. Einerseits untersuchen wir, wie stark sich die Lage des Peaks verändert, wenn unterschiedliche Kombinationen von Padding-Faktoren und Windowing-Funktionen im FFT-Verfahren verwendet werden, also $y'_n - \overline{y'}$. Diese Schwankungen entstehen ausschließlich durch die Wahl der spektralen Parameter.
+
+Andererseits wird für dieselben Spektren mithilfe des bereits oben verwendeten \texttt{peak\_schwer\_error.peak\_finder.py} ermittelt, wie empfindlich die Peakbestimmung selbst gegenüber variierenden Fensterbreiten im Schwerpunktalgorithmus ist. Dadurch entsteht eine zweite Reihe von Peakverschiebungen, die unabhängig vom FFT-Verfahren erzeugt wird und nur die Unsicherheit der Schwerpunktmethode widerspiegelt, also $\overline{y_n} - \overline{\overline{y}}$.
+
+Die Kovarianz wird schließlich berechnet, indem beide Reihen, \newlinealso die Schwankungen durch die Spektralparameter und die Schwankungen durch die Schwerpunktmethode, statistisch miteinander verglichen werden \newline (siehe \texttt{padding\_windowing\_error.peak\_finder.py}).
+
+
+\[
+\operatorname{cov}_{\mathrm{ps,pw}}
+= \frac{1}{N} \sum_{n\in N} 
+\bigl( y'_n - \overline{y'} \bigr)\,
+\bigl( \overline{y_n} - \overline{\overline{y}} \bigr).
+\]
+
+Die kombinierte systematische Unsicherheit für die $n$-te Messung ergibt sich zu
+\begin{equation}
+\sigma_{\mathrm{sys}}(n)
+= \sqrt{
+\sigma_{\mathrm{sys,ps}}^{2}
++ \sigma_{\mathrm{sys,pw}}^{2}
++ 2\,\operatorname{cov}_{\mathrm{ps,pw}}
+}.
+\end{equation}
+
+\section{Statistische Auswertung pro Stab}
+Für jeden Stab wurden fünf unabhängige Messungen durchgeführt. Für die gemessenen Frequenzen $f_n$ ($n=1,\dots,5$) berechnen wir:
+\begin{align}
+\overline{f} &= \frac{1}{5}\sum_{n=1}^{5} f_n, \\
+\mathrm{std} &= \sqrt{\frac{1}{5}\sum_{n=1}^{5}(f_n-\overline{f})^2}, \\
+\sigma_{f,\mathrm{stat}} &= \frac{\mathrm{std}}{\sqrt{5}}, \\
+\overline{\sigma_{\mathrm{sys}}} &= \frac{1}{5}\sum_{n=1}^{5} \sigma_{\mathrm{sys}}(n).
+\end{align}
+
+\centering
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+Messung & f [Hz] & $\sigma_{\text{sys}}$ & $\sigma_{\text{sys,ps}}$ & $\sigma_{\text{sys,pad/win}}$ & cov1 \\
+\hline
+1 & 1460.35 & 0.19& 0.16 & 0.056 & 0.0037\\
+2 & 1460.18 & 0.19& 0.16 & 0.061 & 0.0038\\
+3 & 1460.17 & 0.19& 0.16 & 0.062 & 0.004\\
+4 & 1460.17 & 0.19& 0.16 & 0.062 & 0.0041\\
+5 & 1460.17 & 0.19& 0.18 & 0.063 & 0.004\\
+\hline
+\end{tabular}
+\caption{Brauner Stab – Wertemessungen. 
+$f=1460.21$, std $=0.08$, $\\sigma_{f,\mathrm{stat}} = 0.036$, $\overline{\sigma_{\mathrm{sys}}} = 0.19$.}
+\end{table}
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+Messung & f [Hz] & $\sigma_{\text{sys}}$ & $\sigma_{\text{sys,ps}}$ & $\sigma_{\text{sys,pad/win}}$ & cov1 \\
+\hline
+1 & 1729.51 & 0.19& 0.16 & 0.052 & 0.0033\\
+2 & 1729.51 & 0.19& 0.16 & 0.053 & 0.0033\\
+3 & 1729.51 & 0.19& 0.16 & 0.052 & 0.0032\\
+4 & 1729.33 & 0.19& 0.16 & 0.062 & 0.0038\\
+5 & 1729.51 & 0.19& 0.16 & 0.054 & 0.0034\\
+\hline
+\end{tabular}
+\caption{Silber Stab – Wertemessungen. 
+$f=1729.47$, std $=0.08$, $\sigma_{f,\mathrm{stat}} = 0.036$, $\overline{\sigma_{\mathrm{sys}}} = 0.19$.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+Messung & f [Hz] & $\sigma_{\text{sys}}$ & $\sigma_{\text{sys,ps}}$ & $\sigma_{\text{sys,pad/win}}$ & cov1 \\
+\hline
+1 & 1113.50 & 0.19& 0.16 & 0.060 & 0.0037\\
+2 & 1113.52 & 0.19& 0.16 & 0.061 & 0.004\\
+3 & 1113.52 & 0.19& 0.16 & 0.062 & 0.004\\
+4 & 1113.52 & 0.19& 0.16 & 0.062 & 0.0039\\
+5 & 1113.52 & 0.19& 0.16 & 0.062 & 0.004\\
+\hline
+\end{tabular}
+\caption{Gold Stab – Wertemessungen. 
+$f=1113.52$, std $=0.0089$, $\sigma_{f,\mathrm{stat}}=0.004$, $\overline{\sigma_{\mathrm{sys}}}=0.19$.}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c c c c}
+\hline
+Messung & f [Hz] & $\sigma_{\text{sys}}$ & $\sigma_{\text{sys,ps}}$ & $\sigma_{\text{sys,pad/win}}$ & cov1 \\
+\hline
+1 & 1924.73 & 0.19 & 0.16 & 0.058 & 0.0031\\
+2 & 1924.74 & 0.19 & 0.16 & 0.060 & 0.0035\\
+3 & 1924.74 & 0.18 & 0.16 & 0.054 & 0.0027\\
+4 & 1924.73 & 0.19 & 0.16 & 0.057 & 0.0029\\
+5 & 1924.72 & 0.19& 0.16 & 0.063 & 0.0038\\
+\hline
+\end{tabular}
+\caption{Silber\_2 Stab – Wertemessungen. 
+$f=1924.73$, std $=0.0083$, $\sigma_{f,\mathrm{stat}}=0.0037$, $\overline{\sigma_{\mathrm{sys}}}=0.19$.}
+\end{table}
+\newpage
+\section{Fehlerbeitrag aus den Fehlermessungen}
+Zusätzlich zu den Werte-Messungen wurden Fehlermessungen unter veränderten Einspannbedingungen durchgeführt. Für jede Fehlermessung berechnen wir die Abweichung vom gemittelten Wert des jeweiligen Stabs und bilden den Mittelwert der absoluten Abweichungen als systematischen Fehlerbeitrag aus den Fehlermessungen:
+\begin{equation}
+\sigma_{\mathrm{sys,fehl}} \;=\; \frac{1}{N}\sum_{n\in N} \lvert \overline{f} - f_{\mathrm{fehl},n}\rvert.
+\end{equation}
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c}
+\hline
+Position & Messung 1 [Hz] & Messung 2 [Hz] \\
+\hline
+1 cm & 1459.75 & 1459.75 \\
+2 cm & 1459.10 & 1459.73 \\
+4 cm & 1459.96 & 1459.95 \\
+rot\_halb\_pi & 1459.97 & 1460.14 \\
+rot\_pi & 1460.57 & 1460.58 \\
+Fest & 1459.95 & -- \\
+Locker & 1459.95 & -- \\
+\hline
+\end{tabular}
+\caption{Brauner Stab – Fehlermessungen. $\sigma_{\mathrm{sys,fehl}} = 0.38$.}
+\end{table}
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c}
+\hline
+Position & Messung 1 [Hz] & Messung 2 [Hz] \\
+\hline
+1 cm & 1729.13 & 1728.92 \\
+2 cm & 1729.11 & 1728.26 \\
+4 cm & 1727.64 & 1727.85 \\
+rot\_halb\_pi & 1729.32 & -- \\
+rot\_pi & 1729.12 & -- \\
+Fest & 1729.32 & -- \\
+Locker & 1729.31 & -- \\
+\hline
+\end{tabular}
+\caption{Silber Stab – Fehlermessungen. $\sigma_{\mathrm{sys,fehl}} = 0.67$.}
+\end{table}
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c}
+\hline
+Position & Messung 1 [Hz] & Messung 2 [Hz] \\
+\hline
+1 cm & 1113.10 & 1113.28 \\
+2 cm & 1112.69 & 1112.69 \\
+4 cm & 1112.52 & 1112.48 \\
+rot\_halb\_pi & 1113.51 & -- \\
+rot\_pi & 1113.30 & -- \\
+Fest & 1113.31 & -- \\
+Locker & 1113.50 & -- \\
+\hline
+\end{tabular}
+\caption{Gold Stab – Fehlermessungen. $\sigma_{\mathrm{sys,fehl}} = 0.48$.}
+\end{table}
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c c}
+\hline
+Position & Messung 1 [Hz] & Messung 2 [Hz] \\
+\hline
+1 cm & 1924.11 & 1924.11 \\
+2 cm & 1923.27 & 1923.27 \\
+4 cm & 1922.22 & 1922.22 \\
+rot\_halb\_pi & 1923.90 & 1923.90 \\
+rot\_pi & 1924.11 & 1924.11 \\
+Fest & 1925.15 & -- \\
+Locker & -- & -- \\
+\hline
+\end{tabular}
+\caption{Silber\_2 Stab – Fehlermessungen. $\sigma_{\mathrm{sys,fehl}} = 1.1$.}
+\end{table}
+\section{Gesamtfehler auf die Frequenz}
+Der Gesamtfehler auf $\overline{f}$ wird aus dem statistischen Fehler und den systematischen Anteilen zusammengesetzt:
+\begin{equation}
+\sigma_f \;=\; \sqrt{\sigma_{f,\mathrm{stat}}^2 + \sigma_{\mathrm{sys,fehl}}^2 + \overline{\sigma_{\mathrm{sys}}}^2 }.
+\end{equation}
+
+\section{Gemessene Frequenzen (Ergebnisse)}
+Die aus der Auswertung erhaltenen Frequenzen mit ihren Unsicherheiten lauten:
+\begin{align*}
+f_{\mathrm{braun}} &= \;1460.21 \pm 0.43\ \mathrm{Hz},\\
+f_{\mathrm{silber}} &= \;1729.47 \pm 0.7\ \mathrm{Hz},\\
+f_{\mathrm{gold}} &= \;1113.52 \pm 0.52\ \mathrm{Hz},\\
+f_{\mathrm{silber2}} &= \;1924.73 \pm 1.1\ \mathrm{Hz}.
+\end{align*}
+
+\section{Längen-, Durchmesser- und Massenmessungen}
+Die Längen wurden mit einem Maßband (EG Klasse 2) gemessen; die Durchmesser mit einer Mikrometerschraube. Die Messunsicherheiten sind:
+\begin{align}
+\sigma_D &= \SI{0.00001}{m} \quad(\text{Herstellerangabe: }\pm\SI{0.01}{mm}),\\
+\sigma_L &= \sqrt{(\SI{0.001}{m})^2 + (\SI{0.0007}{m})^2} \;=\; \SI{0.0012}{m},
+\end{align}
+wobei \SI{0.001}{m} die Ablesegenauigkeit (\SI{1}{mm}) und \SI{0.0007}{m} die Toleranz der EG-Klasse 2 ist.
+
+Gemessene Werte:
+\begin{align*}
+D_{\mathrm{braun}} &= 0.01240 \pm 0.00001\ \mathrm{m}, & L_{\mathrm{braun}} &= 1.300 \pm 0.0012\ \mathrm{m},\\
+D_{\mathrm{silber}} &= 0.01245 \pm 0.00001\ \mathrm{m}, & L_{\mathrm{silber}} &= 1.500 \pm 0.0012\ \mathrm{m},\\
+D_{\mathrm{gold}} &= 0.01243 \pm 0.00001\ \mathrm{m}, & L_{\mathrm{gold}} &= 1.500 \pm 0.0012\ \mathrm{m},\\
+D_{\mathrm{silber2}} &= 0.01203 \pm 0.00001\ \mathrm{m}, & L_{\mathrm{silber2}} &= 1.300 \pm 0.0012\ \mathrm{m}.
+\end{align*}
+
+Für die Massen wurden zwei Waagen gleicher Bauart verwendet; die Herstellerangabe für die Messunsicherheit ist $\sigma_{\mathrm{Waage}}=\SI{0.0002}{kg}$. Die gemittelten Massen und deren Unsicherheit (inkl. statistischer Abweichung der beiden Waagenmessungen) sind:
+\begin{align}
+m &= \tfrac{1}{2}(m_1+m_2),\\
+\sigma_m &= \sqrt{\sigma_{\mathrm{Waage}}^2 + \frac{(m_1-m)^2+(m_2-m)^2}{2}}.
+\end{align}
+
+Gemessene Werte:
+\begin{align*}
+m_{\mathrm{braun}} &= 1.2946 \pm 0.00045\ \mathrm{kg},\\
+m_{\mathrm{silber}} &= 1.3249 \pm 0.00049\ \mathrm{kg},\\
+m_{\mathrm{gold}} &= 1.4201 \pm 0.00036\ \mathrm{kg},\\
+m_{\mathrm{silber2}} &= 0.3994 \pm 0.00022\ \mathrm{kg}.
+\end{align*}
+
+\section{Bestimmung von Elastizitätsmodul und Dichte}
+Aus den gemessenen Eigenfrequenzen, Längen, Massen und Durchmessern berechnen wir das Elastizitätsmodul $E$ und die Dichte $\rho$ mit den folgenden Formeln (für einen runden Stab mit zweiseitiger Einspannung und entsprechender Schwingungsbedingung; die verwendete Form entspricht dem in der ursprünglichen Ausarbeitung verwendeten Modell):
+\begin{align}
+E &= \frac{16\,f^2\,L\,m}{\pi D^2}, \label{eq:E}\\
+\rho &= \frac{4\,m}{\pi D^2 L}. \label{eq:rho}
+\end{align}
+
+\subsection{Partielle Ableitungen}
+Für die Fehlerfortpflanzung benötigen wir die partiellen Ableitungen:
+\begin{align}
+\frac{\partial E}{\partial f} &= \frac{32\,f\,L\,m}{\pi D^2},\\
+\frac{\partial E}{\partial L} &= \frac{16\,f^2\,m}{\pi D^2},\\
+\frac{\partial E}{\partial m} &= \frac{16\,f^2\,L}{\pi D^2},\\
+\frac{\partial E}{\partial D} &= -\frac{32\,f^2\,L\,m}{\pi D^3},
+\end{align}
+und für $\rho$:
+\begin{align}
+\frac{\partial \rho}{\partial m} &= \frac{4}{\pi D^2 L},\\
+\frac{\partial \rho}{\partial D} &= -\frac{8\,m}{\pi D^3 L},\\
+\frac{\partial \rho}{\partial L} &= -\frac{4\,m}{\pi D^2 L^2}.
+\end{align}
+
+\subsection{Gesamtfehler}
+Die Gesamtunsicherheiten werden über die übliche Gauß'sche Fehlerfortpflanzung kombiniert:
+\begin{align}
+\sigma_E &= \sqrt{\Bigl(\frac{\partial E}{\partial f}\sigma_f\Bigr)^2 + \Bigl(\frac{\partial E}{\partial L}\sigma_L\Bigr)^2 + \Bigl(\frac{\partial E}{\partial m}\sigma_m\Bigr)^2 + \Bigl(\frac{\partial E}{\partial D}\sigma_D\Bigr)^2 },\\
+\sigma_\rho &= \sqrt{\Bigl(\frac{\partial \rho}{\partial m}\sigma_m\Bigr)^2 + \Bigl(\frac{\partial \rho}{\partial D}\sigma_D\Bigr)^2 + \Bigl(\frac{\partial \rho}{\partial L}\sigma_L\Bigr)^2 }.
+\end{align}
+
+\section{Ergebnisse für $E$ und $\rho$}
+Die in der Auswertung berechneten Werte lauten:
+
+\begin{itemize}
+  \item \textbf{Braune Stange:}
+  \[
+\frac{\partial E_{\text{braun}}}{\partial f}^2 \, \sigma_{f,\text{braun}}^{\,2}
+= 4.9 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial L}^2 \, \sigma_{L,\text{braun}}^{\,2}
+= 12.0 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial m}^2 \, \sigma_{m,\text{braun}}^{\,2}
+= 1.7 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial D}^2 \, \sigma_{D,\text{braun}}^{\,2}
+= 36.7 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{braun}}}{\partial m}\, \sigma_{m,\text{braun}} \right)^2
+= 8.2\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{braun}}}{\partial D}\, \sigma_{D,\text{braun}} \right)^2
+= 176.9\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{braun}}}{\partial L}\, \sigma_{L,\text{braun}} \right)^2
+= 57.9\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+  \[
+  E_{\mathrm{braun}} = (118.86 \pm 0.24)\ \mathrm{GPa},\qquad
+  \rho_{\mathrm{braun}} = (8246 \pm 16)\ \mathrm{kg\,m^{-3}}.
+  \]
+  \item \textbf{Silberne Stange:}
+  \[
+\frac{\partial E_{\text{silber}}}{\partial f}^2 \, \sigma_{f,\text{silber}}^{\,2}
+= 25.0 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{silber}}}{\partial L}^2 \, \sigma_{L,\text{silber}}^{\,2}
+= 24.7 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{silber}}}{\partial m}^2 \, \sigma_{m,\text{silber}}^{\,2}
+= 4.4 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{silber}}}{\partial D}^2 \, \sigma_{D,\text{silber}}^{\,2}
+= 98.4 \times 10^{15}\ \text{Pa}^2
+\]
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial m}\, \sigma_{m,\text{silber}} \right)^2
+= 7.2\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial D}\, \sigma_{D,\text{silber}} \right)^2
+= 135.8\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial L}\, \sigma_{L,\text{silber}} \right)^2
+= 33.9\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+  \[
+  E_{\mathrm{silber}} = (195.31 \pm 0.39)\ \mathrm{GPa},\qquad
+  \rho_{\mathrm{silber}} = (7255 \pm 13)\ \mathrm{kg\,m^{-3}}.
+  \]
+  \item \textbf{Goldene Stange:}
+
+  \[
+\frac{\partial E_{\text{gold}}}{\partial f}^2 \, \sigma_{f,\text{gold}}^{\,2}
+= 6.6 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{gold}}}{\partial L}^2 \, \sigma_{L,\text{gold}}^{\,2}
+= 4.9 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{gold}}}{\partial m}^2 \, \sigma_{m,\text{gold}}^{\,2}
+= 0.49 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{gold}}}{\partial D}^2 \, \sigma_{D,\text{gold}}^{\,2}
+= 19.6 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{gold}}}{\partial m}\, \sigma_{m,\text{gold}} \right)^2
+= 3.9\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{gold}}}{\partial D}\, \sigma_{D,\text{gold}} \right)^2
+= 157.6\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{gold}}}{\partial L}\, \sigma_{L,\text{gold}} \right)^2
+= 39.0\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+  \[
+  E_{\mathrm{gold}} = (87.06 \pm 0.18)\ \mathrm{GPa},\qquad
+  \rho_{\mathrm{gold}} = (7801 \pm 14)\ \mathrm{kg\,m^{-3}}.
+  \]
+  \item \textbf{Silberne Stange 2:}
+  \[
+\frac{\partial E_{\text{braun}}}{\partial f}^2 \, \sigma_{f,\text{braun}}^{\,2}
+= 6.0 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial L}^2 \, \sigma_{L,\text{braun}}^{\,2}
+= 3.9 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial m}^2 \, \sigma_{m,\text{braun}}^{\,2}
+= 1.4 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\frac{\partial E_{\text{braun}}}{\partial D}^2 \, \sigma_{D,\text{braun}}^{\,2}
+= 12 \times 10^{15}\ \text{Pa}^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial m}\, \sigma_{m,\text{silber}} \right)^2
+= 2.2\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial D}\, \sigma_{D,\text{silber}} \right)^2
+= 20.2\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+
+\[
+\left( \frac{\partial \rho_{\text{silber}}}{\partial L}\, \sigma_{L,\text{silber}} \right)^2
+= 6.2\ \left(\text{kg}/\text{m}^3\right)^2
+\]
+ \[
+  E_{\mathrm{silber2}} = (67.69 \pm 0.15)\ \mathrm{GPa},\qquad
+  \rho_{\mathrm{silber2}} = (2703 \pm 5.3)\ \mathrm{kg\,m^{-3}}.
+  \]
+\end{itemize}
+
+\section{Diskussion der Fehlerbeiträge}
+ Aus den Rechnungen ergibt sich, dass der Beitrag durch die Unsicherheit des Durchmessers $\sigma_D$ dominiert. Allgemein gilt für alle Stäbe entweder:
+\[
+\text{größter Beitrag: }\sigma_D \quad>\quad \sigma_L  \quad>\quad \sigma_f \quad>\quad \sigma_m.
+\]
+oder
+\[
+\text{größter Beitrag: }\sigma_D \quad>\quad \sigma_f  \quad>\quad \ \sigma_L \quad>\quad \sigma_m.
+\]
+Das heißt: relative Unsicherheiten in $D$ wirken sich aufgrund der $D^2$ bzw. $D^3$ Abhängigkeit in (\ref{eq:E}) und (\ref{eq:rho}) besonders stark aus.
+
+\section{Vergleich mit Literaturwerten und Zuordnung der Materialarten}
+Aus den gemessenen Dichten wurden mögliche Materialzuordnungen vorgeschlagen und die ermittelten Elastizitätsmoduln mit Literaturwerten verglichen:
+
+\begin{itemize}
+  \item \textbf{Braun} $\to$ Berylliumkupfer (C17200), Literatur: $E_{\mathrm{lit}} \approx \SI{125}{GPa}$ \\
+    Verhältnis: $E_{\mathrm{braun}}/E_{\mathrm{lit}} = 0.95$, Differenz in Einheiten von $\sigma_E$: $\approx 25.6\,\sigma_E$.
+  \item \textbf{Silber} $\to$ Grauguss (Grey Cast Iron), Literatur: $E_{\mathrm{lit}} \approx \SI{130}{GPa}$ \\
+    Verhältnis: $E_{\mathrm{silber}}/E_{\mathrm{lit}} \approx 1.5$, Differenz $\approx 167.5\,\sigma_E$.
+  \item \textbf{Gold} $\to$ Aluminiumbronze, Literatur: $E_{\mathrm{lit}} \approx \SI{120}{GPa}$ \\
+    Verhältnis: $E_{\mathrm{gold}}/E_{\mathrm{lit}} \approx 0.725$, Differenz sehr groß in Bezug auf $\sigma_E$.
+  \item \textbf{Silber2} $\to$ Aluminium (Alloy 1100), Literatur: $E_{\mathrm{lit}} \approx \SI{69}{GPa}$ \\
+    Verhältnis: $E_{\mathrm{silber2}}/E_{\mathrm{lit}} \approx 0.98$, Differenz $\approx 8.73\,\sigma_E$.
+\end{itemize}
+
+Die Abweichungen sind in mehreren Fällen sehr groß (bis zu mehreren hundertfachen Unsicherheiten), was darauf hindeutet, dass entweder die Materialzuordnung nicht korrekt ist oder systematische Fehler in der Versuchsdurchführung bzw. in der Modellannahme (z.\,B. Form der Schwingungsbedingung, Einfluss der Einspannung) vorliegen.
+
+\section*{Quellen}
+(Die in der Originalausarbeitung angegebenen Webseiten:)
+\begin{itemize}
+  \item \texttt{https://www.azom.com/article.aspx?ArticleID=6326}
+  \item \texttt{https://www.engineeringtoolbox.com/young-modulus-d\_417.html}
+  \item \texttt{https://www.bestech.com.au/wp-content/uploads/Modulus-of-Elasticity.pdf}
+  \item \texttt{https://www.sonelastic.com/en/fundamentals/tables-of-materials-properties/non-ferrous-metals}
+\end{itemize}
+
+
+\end{document}
